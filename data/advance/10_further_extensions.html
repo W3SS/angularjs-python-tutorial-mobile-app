@@ -1,0 +1,304 @@
+<ion-view view-title="10 - Further Extensions">
+<ion-content style="margin:0 12px">
+
+<div class="col-md-7 middle-col">
+<h1>Extension Programming with C</h1>
+
+<hr>
+
+<p>Any code that you write using any compiled language like C, C++, or Java can be integrated or imported into another Python script. This code is considered as an &quot;extension.&quot;</p>
+<p>A Python extension module is nothing more than a normal C library. On Unix machines, these libraries usually end in <b>.so</b> (for shared object). On Windows machines, you typically see <b>.dll</b> (for dynamically linked library).</p>
+<h2>Pre-Requisites for Writing Extensions</h2>
+<p>To start writing your extension, you are going to need the Python header files.</p>
+<ion-list>
+<li><p>On Unix machines, this usually requires installing a developer-specific package such as python2.5-dev.</p></li>
+<li><p>Windows users get these headers as part of the package when they use the binary Python installer.</p></li>
+</ion-list>
+<p>Additionally, it is assumed that you have good knowledge of C or C++ to write any Python Extension using C programming.</p>
+<h2>First look at a Python Extension</h2>
+<p>For your first look at a Python extension module, you need to group your code into four part &#x2212;</p>
+<ion-list>
+<li><p>The header file <i>Python.h</i>.</p></li>
+<li><p>The C functions you want to expose as the interface from your module.</p></li>
+<li><p>A table mapping the names of your functions as Python developers see them to C functions inside the extension module.</p></li>
+<li><p>An initialization function.</p></li>
+</ion-list>
+<h2>The Header File <i>Python.h</i></h2>
+<p>You need include <i>Python.h</i> header file in your C source file, which gives you access to the internal Python API used to hook your module into the interpreter.</p>
+<p>Make sure to include Python.h before any other headers you might need. You need to follow the includes with the functions you want to call from Python.</p>
+<h2>The C Functions</h2>
+<p>The signatures of the C implementation of your functions always takes one of the following three forms &#x2212;</p>
+<pre class="prettyprint notranslate">
+static PyObject *MyFunction( PyObject *self, PyObject *args );
+
+static PyObject *MyFunctionWithKeywords(PyObject *self,
+                                 PyObject *args,
+                                 PyObject *kw);
+
+static PyObject *MyFunctionWithNoArgs( PyObject *self );
+</pre>
+<p>Each one of the preceding declarations returns a Python object. There is no such thing as a <i>void </i> function in Python as there is in C. If you do not want your functions to return a value, return the C equivalent of Python&apos;s <b>None</b> value. The Python headers define a macro, Py_RETURN_NONE, that does this for us.</p>
+<p>The names of your C functions can be whatever you like as they are never seen outside of the extension module. They are defined as <i>static</i> function.</p>
+<p>Your C functions usually are named by combining the Python module and function names together, as shown here &#x2212;</p>
+<pre class="prettyprint notranslate">
+static PyObject *<i>module_func</i>(PyObject *self, PyObject *args) {
+   /* Do your stuff here. */
+   Py_RETURN_NONE;
+}
+</pre>
+<p>This is a Python function called <i>func</i> inside of the module <i>module</i>. You will be putting pointers to your C functions into the method table for the module that usually comes next in your source code.</p>
+<h2>The Method Mapping Table</h2>
+<p>This method table is a simple array of PyMethodDef structures. That structure looks something like this &#x2212;</p>
+<pre class="prettyprint notranslate">
+struct PyMethodDef {
+   char *ml_name;
+   PyCFunction ml_meth;
+   int ml_flags;
+   char *ml_doc;
+};
+</pre>
+<p>Here is the description of the members of this structure:</p>
+<ion-list>
+<li><p><b>ml_name:</b> This is the name of the function as the Python interpreter presents when it is used in Python programs.</p></li>
+<li><p><b>ml_meth:</b> This must be the address to a function that has any one of the signatures described in previous seection.</p></li>
+<li><p><b>ml_flags:</b> This tells the interpreter which of the three signatures ml_meth is using. </p>
+    <ul class="list">
+	<li><p>- This flag usually has a value of METH_VARARGS.</p></li>
+	<li><p>- This flag can be bitwise OR&apos;ed with METH_KEYWORDS if you want to allow keyword arguments into your function.</p></li>
+	<li><p>- This can also have a value of METH_NOARGS that indicates you do not want to accept any arguments.</p></li>
+	</ul>
+</li>
+<li><p><b>ml_doc:</b> This is the docstring for the function, which could be NULL if you do not feel like writing one.</p></li>
+</ion-list>
+<p>This table needs to be terminated with a sentinel that consists of NULL and 0 values for the appropriate members.</p>
+<h3>Example</h3>
+<p>For the above-defined function, we have following method mapping table &#x2212;</p>
+<pre class="prettyprint notranslate">
+static PyMethodDef <i>module</i>_methods[] = {
+   { &quot;<i>func</i>&quot;, (PyCFunction)<i>module_func</i>, METH_NOARGS, NULL },
+   { NULL, NULL, 0, NULL }
+};
+</pre>
+<h2>The Initialization Function</h2>
+<p>The last part of your extension module is the initialization function. This function is called by the Python interpreter when the module is loaded. It is required that the function be named <b>init<i>Module</i></b>, where <i>Module</i> is the name of the module.</p>
+<p>The initialization function needs to be exported from the library you will be building. The Python headers define PyMODINIT_FUNC to include the appropriate incantations for that to happen for the particular environment in which we&apos;re compiling. All you have to do is use it when defining the function.</p>
+<p>Your C initialization function generally has the following overall structure &#x2212;</p>
+<pre class="prettyprint notranslate">
+PyMODINIT_FUNC init<i>Module</i>() {
+   Py_InitModule3(<i>func</i>, <i>module</i>_methods, &quot;docstring...&quot;);
+}
+</pre>
+<p>Here is the description of <i>Py_InitModule3</i> function &#x2212;</p>
+<ion-list>
+<li><p><b>func:</b> This is the function to be exported.</p></li>
+<li><p><b><i>module</i>_methods:</b> This is the mapping table name defined above.</p></li>
+<li><p><b><i>docstring:</i></b> This is the comment you want to give in your extension.</p></li>
+</ion-list>
+<p>Putting this all together looks like the following &#x2212;</p>
+<pre class="prettyprint notranslate">
+#include &lt;Python.h&gt;
+
+static PyObject *<i>module_func</i>(PyObject *self, PyObject *args) {
+   /* Do your stuff here. */
+   Py_RETURN_NONE;
+}
+
+static PyMethodDef <i>module</i>_methods[] = {
+   { &quot;<i>func</i>&quot;, (PyCFunction)<i>module_func</i>, METH_NOARGS, NULL },
+   { NULL, NULL, 0, NULL }
+};
+
+PyMODINIT_FUNC init<i>Module</i>() {
+   Py_InitModule3(<i>func</i>, <i>module</i>_methods, &quot;docstring...&quot;);
+}
+</pre>
+<h3>Example</h3>
+<p>A simple example that makes use of all the above concepts &#x2212;</p>
+<pre class="prettyprint notranslate">
+#include &lt;Python.h&gt;
+
+static PyObject* helloworld(PyObject* self)
+{
+    return Py_BuildValue(&quot;s&quot;, &quot;Hello, Python extensions!!&quot;);
+}
+
+static char helloworld_docs[] =
+    &quot;helloworld( ): Any message you want to put here!!\n&quot;;
+
+static PyMethodDef helloworld_funcs[] = {
+    {&quot;helloworld&quot;, (PyCFunction)helloworld, 
+     METH_NOARGS, helloworld_docs},
+    {NULL}
+};
+
+void inithelloworld(void)
+{
+    Py_InitModule3(&quot;helloworld&quot;, helloworld_funcs,
+                   &quot;Extension module example!&quot;);
+}
+</pre>
+<p>Here the <i>Py_BuildValue</i> function is used to build a Python value. Save above code in hello.c file. We would see how to compile and install this module to be called from Python script.</p>
+<h2>Building and Installing Extensions:</h2>
+<p>The <i>distutils</i> package makes it very easy to distribute Python modules, both pure Python and extension modules, in a standard way. Modules are distributed in source form and built and installed via a setup script usually called <i>setup.py</i> as follows.</p>
+<p>For the above module, you need to prepare following setup.py script &#x2212;</p>
+<pre class="prettyprint notranslate">
+from distutils.core import setup, Extension
+setup(name=&apos;helloworld&apos;, version=&apos;1.0&apos;,  \
+      ext_modules=[Extension(&apos;helloworld&apos;, [&apos;hello.c&apos;])])
+</pre>
+<p>Now, use the following command, which would perform all needed compilation and linking steps, with the right compiler and linker commands and flags, and copies the resulting dynamic library into an appropriate directory &#x2212;</p>
+<pre class="prettyprint notranslate">
+$ python setup.py install
+</pre>
+<p>On Unix-based systems, you&apos;ll most likely need to run this command as root in order to have permissions to write to the site-packages directory. This usually is not a problem on Windows.</p>
+<h2>Importing Extensions</h2>
+<p>Once you installed your extension, you would be able to import and call that extension in your Python script as follows &#x2212;</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+import helloworld
+
+print helloworld.helloworld()
+</pre>
+<p>This would produce the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+Hello, Python extensions!!
+</pre>
+<h2>Passing Function Parameters</h2>
+<p>As you will most likely want to define functions that accept arguments, you can use one of the other signatures for your C functions. For example, following function, that accepts some number of parameters, would be defined like this &#x2212;</p>
+<pre class="prettyprint notranslate">
+static PyObject *<i>module_func</i>(PyObject *self, PyObject *args) {
+   /* Parse args and do something interesting here. */
+   Py_RETURN_NONE;
+}
+</pre>
+<p>The method table containing an entry for the new function would look like this &#x2212;</p>
+<pre class="prettyprint notranslate">
+static PyMethodDef <i>module</i>_methods[] = {
+   { &quot;<i>func</i>&quot;, (PyCFunction)<i>module_func</i>, METH_NOARGS, NULL },
+   { &quot;<i>func</i>&quot;, <i>module_func</i>, METH_VARARGS, NULL },
+   { NULL, NULL, 0, NULL }
+};
+</pre>
+<p>You can use API <i>PyArg_ParseTuple</i> function to extract the arguments from the one PyObject pointer passed into your C function.</p>
+<p>The first argument to PyArg_ParseTuple is the args argument. This is the object you will be <i>parsing</i>. The second argument is a format string describing the arguments as you expect them to appear. Each argument is represented by one or more characters in the format string as follows.</p>
+<pre class="prettyprint notranslate">
+static PyObject *<i>module_func</i>(PyObject *self, PyObject *args) {
+   int i;
+   double d;
+   char *s;
+
+   if (!PyArg_ParseTuple(args, &quot;ids&quot;, &amp;i, &amp;d, &amp;s)) {
+      return NULL;
+   }
+   
+   /* Do something interesting here. */
+   Py_RETURN_NONE;
+}
+</pre>
+<p>Compiling the new version of your module and importing it enables you to invoke the new function with any number of arguments of any type &#x2212;</p>
+<pre class="prettyprint notranslate">
+module.func(1, s=&quot;three&quot;, d=2.0)
+module.func(i=1, d=2.0, s=&quot;three&quot;)
+module.func(s=&quot;three&quot;, d=2.0, i=1)
+</pre>
+<p>You can probably come up with even more variations.</p>
+<h2>The <i>PyArg_ParseTuple</i> Function</h2>
+<p>Here is the standard signature for <b>PyArg_ParseTuple</b> function &#x2212;</p>
+<pre class="prettyprint notranslate">
+int PyArg_ParseTuple(PyObject* tuple,char* format,...)
+</pre>
+<p>This function returns 0 for errors, and a value not equal to 0 for success. tuple is the PyObject* that was the C function&apos;s second argument. Here <i>format</i> is a C string that describes mandatory and optional arguments.</p>
+<p>Here is a list of format codes for <b>PyArg_ParseTuple</b> function &#x2212;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:10%">Code</th><th style="width:10%">C type</th><th>Meaning</th>
+</tr>
+<tr><td>c</td><td>char</td><td> A Python string of length 1 becomes a C char.</td></tr>
+<tr><td>d</td><td>double</td><td>A Python float becomes a C double.</td></tr>
+<tr><td>f</td><td>float</td><td>A Python float becomes a C float.</td></tr>
+<tr><td>i</td><td>int</td><td>A Python int becomes a C int.</td></tr>
+<tr><td>l</td><td>long</td><td>A Python int becomes a C long.</td></tr>
+<tr><td>L</td><td>long long</td><td>A Python int becomes a C long long</td></tr>
+<tr><td>O</td><td>PyObject*</td><td>Gets non-NULL borrowed reference to Python argument.</td></tr>
+<tr><td>s</td><td>char*</td><td>Python string without embedded nulls to C char*.</td></tr>
+<tr><td>s#</td><td>char*+int</td><td>Any Python string to C address and length.</td></tr>
+<tr><td>t#</td><td>char*+int</td><td>Read-only single-segment buffer to C address and length.</td></tr>
+<tr><td>u</td><td>Py_UNICODE*</td><td>Python Unicode without embedded nulls to C.</td></tr>
+<tr><td>u#</td><td>Py_UNICODE*+int</td><td>Any Python Unicode C address and length.</td></tr>
+<tr><td>w#</td><td>char*+int</td><td>Read/write single-segment buffer to C address and length.</td></tr>
+<tr><td>z</td><td>char*</td><td>Like s, also accepts None (sets C char* to NULL).</td></tr>
+<tr><td>z#</td><td>char*+int</td><td>Like s#, also accepts None (sets C char* to NULL).</td></tr>
+<tr><td>(...)</td><td>as per ...</td><td>A Python sequence is treated as one argument per item.</td></tr>
+<tr><td>|</td><td>&#xA0;</td><td>The following arguments are optional.</td></tr>
+<tr><td>:</td><td>&#xA0;</td><td>Format end, followed by function name for error messages.</td></tr>
+<tr><td>;</td><td>&#xA0;</td><td>Format end, followed by entire error message text.</td></tr>
+</table>
+<h2>Returning Values</h2>
+<p><i>Py_BuildValue</i> takes in a format string much like <i>PyArg_ParseTuple</i> does. Instead of passing in the addresses of the values you are building, you pass in the actual values. Here&apos;s an example showing how to implement an add function &#x2212;</p>
+<pre class="prettyprint notranslate">
+static PyObject *foo_add(PyObject *self, PyObject *args) {
+   int a;
+   int b;
+
+   if (!PyArg_ParseTuple(args, &quot;ii&quot;, &amp;a, &amp;b)) {
+      return NULL;
+   }
+   return Py_BuildValue(&quot;i&quot;, a + b);
+}
+</pre>
+<p>This is what it would look like if implemented in Python &#x2212;</p>
+<pre class="prettyprint notranslate">
+def add(a, b):
+   return (a + b)
+</pre>
+<p>You can return two values from your function as follows, this would be cauptured using a list in Python.</p>
+<pre class="prettyprint notranslate">
+static PyObject *foo_add_subtract(PyObject *self, PyObject *args) {
+   int a;
+   int b;
+
+   if (!PyArg_ParseTuple(args, &quot;ii&quot;, &amp;a, &amp;b)) {
+      return NULL;
+   }
+   return Py_BuildValue(&quot;ii&quot;, a + b, a - b);
+}
+</pre>
+<p>This is what it would look like if implemented in Python &#x2212;</p>
+<pre class="prettyprint notranslate">
+def add_subtract(a, b):
+   return (a + b, a - b)
+</pre>
+<h2>The <i>Py_BuildValue</i> Function:</h2>
+<p>Here is the standard signature for <b>Py_BuildValue</b> function &#x2212;</p>
+<pre class="prettyprint notranslate">
+PyObject* Py_BuildValue(char* format,...)
+</pre>
+<p>Here <i>format</i> is a C string that describes the Python object to build. The following arguments of <i>Py_BuildValue</i> are C values from which the result is built. The <i>PyObject*</i> result is a new reference.</p>
+<p>Following table lists the commonly used code strings, of which zero or more are joined into string format.</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:10%">Code</th><th style="width:10%">C type</th><th>Meaning</th>
+</tr>
+<tr><td>c</td><td>char</td><td>A C char becomes a Python string of length 1.</td></tr>
+<tr><td>d</td><td>double</td><td>A C double becomes a Python float.</td></tr>
+<tr><td>f</td><td>float</td><td>A C float becomes a Python float.</td></tr>
+<tr><td>i</td><td>int</td><td>A C int becomes a Python int.</td></tr>
+<tr><td>l</td><td>long</td><td>A C long becomes a Python int.</td></tr>
+<tr><td>N</td><td>PyObject*</td><td>Passes a Python object and steals a reference.</td></tr>
+<tr><td>O</td><td>PyObject*</td><td>Passes a Python object and INCREFs it as normal.</td></tr>
+<tr><td>O&amp;</td><td>convert+void*</td><td>Arbitrary conversion</td></tr>
+<tr><td>s</td><td>char*</td><td>C 0-terminated char* to Python string, or NULL to None.</td></tr>
+<tr><td>s#</td><td>char*+int</td><td>C char* and length to Python string, or NULL to None.</td></tr>
+<tr><td>u</td><td>Py_UNICODE*</td><td>C-wide, null-terminated string to Python Unicode, or NULL to None.</td></tr>
+<tr><td>u#</td><td>Py_UNICODE*+int</td><td>C-wide string and length to Python Unicode, or NULL to None.</td></tr>
+<tr><td>w#</td><td>char*+int</td><td>Read/write single-segment buffer to C address and length.</td></tr>
+<tr><td>z</td><td>char*</td><td>Like s, also accepts None (sets C char* to NULL).</td></tr>
+<tr><td>z#</td><td>char*+int</td><td>Like s#, also accepts None (sets C char* to NULL).</td></tr>
+<tr><td>(...)</td><td>as per ...</td><td>Builds Python tuple from C values.</td></tr>
+<tr><td>[...]</td><td>as per ...</td><td>Builds Python list from C values.</td></tr>
+<tr><td>{...}</td><td>as per ...</td><td>Builds Python dictionary from C values, alternating keys and values.</td></tr>
+</table>
+<p>Code {...} builds dictionaries from an even number of C values, alternately keys and values. For example, Py_BuildValue(&quot;{issi}&quot;,23,&quot;zig&quot;,&quot;zag&quot;,42) returns a dictionary like Python&apos;s {23:&apos;zig&apos;,&apos;zag&apos;:42}.</p>
+</div>
+</ion-content>
+</ion-view>

@@ -1,0 +1,369 @@
+<ion-view view-title="04 - MySQL Database Access">
+<ion-content style="margin:0 12px">
+
+<div class="col-md-7 middle-col">
+<h1>MySQL Database Access</h1>
+
+<hr>
+
+<p>The Python standard for database interfaces is the Python DB-API. Most Python database interfaces adhere to this standard.</p>
+<p>You can choose the right database for your application. Python Database API supports a wide range of database servers such as &#x2212;</p>
+<ion-list>
+<li><p>GadFly</p></li>
+<li><p>mSQL</p></li>
+<li><p>MySQL</p></li>
+<li><p>PostgreSQL</p></li>
+<li><p>Microsoft SQL Server 2000</p></li>
+<li><p>Informix</p></li>
+<li><p>Interbase</p></li>
+<li><p>Oracle</p></li>
+<li><p>Sybase</p></li>
+</ion-list>
+<p>Here is the list of available Python database interfaces: <a ng-click="openMarket('http://wiki.python.org/moin/DatabaseInterfaces')">Python Database Interfaces and APIs</a> .You must download a separate DB API module for each database you need to access. For example, if you need to access an Oracle database as well as a MySQL database, you must download both the Oracle and the MySQL database modules.</p>
+<p>The DB API provides a minimal standard for working with databases using Python structures and syntax wherever possible. This API includes the following:</p>
+<ion-list>
+<li><p>Importing the API module.</p></li>
+<li><p>Acquiring a connection with the database.</p></li>
+<li><p>Issuing SQL statements and stored procedures.</p></li>
+<li><p>Closing the connection</p></li>
+</ion-list>
+<p>We would learn all the concepts using MySQL, so let us talk about MySQLdb module.</p>
+<h2>What is MySQLdb?</h2>
+<p>MySQLdb is an interface for connecting to a MySQL database server from Python. It implements the Python Database API v2.0 and is built on top of the MySQL C API.</p>
+<h2>How do I Install MySQLdb?</h2>
+<p>Before proceeding, you make sure you have MySQLdb installed on your machine. Just type the following in your Python script and execute it:</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+</pre>
+<p>If it produces the following result, then it means MySQLdb module is not installed:</p>
+<pre class="prettyprint notranslate">
+Traceback (most recent call last):
+  File &quot;test.py&quot;, line 3, in &lt;module&gt;
+    import MySQLdb
+ImportError: No module named MySQLdb
+</pre>
+<p>To install MySQLdb module, download it from <a ng-click="openMarket('http://sourceforge.net/projects/mysql-python')">MySQLdb Download</a> page and proceed as follows:</p>
+<pre class="prettyprint notranslate">
+$ gunzip MySQL-python-1.2.2.tar.gz
+$ tar -xvf MySQL-python-1.2.2.tar
+$ cd MySQL-python-1.2.2
+$ python setup.py build
+$ python setup.py install
+</pre>
+<p><b>Note:</b> Make sure you have root privilege to install above module.</p>
+<h2>Database Connection</h2>
+<p>Before connecting to a MySQL database, make sure of the followings &#x2212;</p>
+<ion-list>
+<li><p>You have created a database TESTDB.</p></li>
+<li><p>You have created a table EMPLOYEE in TESTDB.</p></li>
+<li><p>This table has fields FIRST_NAME, LAST_NAME, AGE, SEX and INCOME.</p></li>
+<li><p>User ID &quot;testuser&quot; and password &quot;test123&quot; are set to access TESTDB.</p></li>
+<li><p>Python module MySQLdb is installed properly on your machine.</p></li>
+<li><p>You have gone through tutorial about MySQL to understand MySQL Basics.</p>
+</li>
+</ion-list>
+<h3>Example</h3>
+<p>Following is the example of connecting with MySQL database &quot;TESTDB&quot;</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# execute SQL query using <i>execute()</i> method.
+cursor.execute(&quot;SELECT VERSION()&quot;)
+
+# Fetch a single row using <i>fetchone()</i> method.
+data = cursor.fetchone()
+
+print &quot;Database version : %s &quot; % data
+
+# disconnect from server
+db.close()
+</pre>
+<p>While running this script, it is producing the following result in my Linux machine.</p>
+<pre class="prettyprint notranslate">
+Database version : 5.0.45
+</pre>
+<p>If a connection is established with the datasource, then a Connection Object is returned and saved into <b>db</b> for further use, otherwise <b>db</b> is set to None. Next, <b>db</b> object is used to create a <b>cursor</b> object, which in turn is used to execute SQL queries. Finally, before coming out, it ensures that database connection is closed and resources are released.</p>
+<h2>Creating Database Table</h2>
+<p>Once a database connection is established, we are ready to create tables or records into the database tables using <b>execute</b> method of the created cursor.</p>
+<h3>Example</h3>
+<p>Let us create Database table EMPLOYEE:</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# Drop table if it already exist using <i>execute()</i> method.
+cursor.execute(&quot;DROP TABLE IF EXISTS EMPLOYEE&quot;)
+
+# Create table as per requirement
+sql = &quot;&quot;&quot;CREATE TABLE EMPLOYEE (
+         FIRST_NAME  CHAR(20) NOT NULL,
+         LAST_NAME  CHAR(20),
+         AGE INT,  
+         SEX CHAR(1),
+         INCOME FLOAT )&quot;&quot;&quot;
+
+cursor.execute(sql)
+
+# disconnect from server
+db.close()
+</pre>
+<h2>INSERT Operation</h2>
+<p>It is required when you want to create your records into a database table.</p>
+<h3>Example</h3>
+<p>The following example, executes SQL <i>INSERT</i> statement to create a record into EMPLOYEE table &#x2212;</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# Prepare SQL query to INSERT a record into the database.
+sql = &quot;&quot;&quot;INSERT INTO EMPLOYEE(FIRST_NAME,
+         LAST_NAME, AGE, SEX, INCOME)
+         VALUES (&apos;Mac&apos;, &apos;Mohan&apos;, 20, &apos;M&apos;, 2000)&quot;&quot;&quot;
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Commit your changes in the database
+   db.commit()
+except:
+   # Rollback in case there is any error
+   db.rollback()
+
+# disconnect from server
+db.close()
+</pre>
+<p>Above example can be written as follows to create SQL queries dynamically &#x2212;</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# Prepare SQL query to INSERT a record into the database.
+sql = &quot;INSERT INTO EMPLOYEE(FIRST_NAME, \
+       LAST_NAME, AGE, SEX, INCOME) \
+       VALUES (&apos;%s&apos;, &apos;%s&apos;, &apos;%d&apos;, &apos;%c&apos;, &apos;%d&apos; )&quot; % \
+       (&apos;Mac&apos;, &apos;Mohan&apos;, 20, &apos;M&apos;, 2000)
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Commit your changes in the database
+   db.commit()
+except:
+   # Rollback in case there is any error
+   db.rollback()
+
+# disconnect from server
+db.close()
+</pre>
+<h3>Example</h3>
+<p>Following code segment is another form of execution where you can pass parameters directly &#x2212;</p>
+<pre class="prettyprint notranslate">
+..................................
+user_id = &quot;test123&quot;
+password = &quot;password&quot;
+
+con.execute(&apos;insert into Login values(&quot;%s&quot;, &quot;%s&quot;)&apos; % \
+             (user_id, password))
+..................................
+</pre>
+<h2>READ Operation</h2>
+<p>READ Operation on any database means to fetch some useful information from the database.</p>
+<p>Once our database connection is established, you are ready to make a query into this database. You can use either <b>fetchone()</b> method to fetch single record or <b>fetchall()</b> method to fetech multiple values from a database table.</p>
+<ion-list>
+<li><p><b>fetchone():</b> It fetches the next row of a query result set. A result set is an object that is returned when a cursor object is used to query a table.</p></li>
+<li><p><b>fetchall():</b> It fetches all the rows in a result set. If some rows have already been extracted from the result set, then it retrieves
+the remaining rows from the result set.</p></li>
+<li><p><b>rowcount:</b> This is a read-only attribute and returns the number of rows that were affected by an execute() method.</p></li>
+</ion-list>
+<h3>Example</h3>
+<p>The following procedure queries all the records from EMPLOYEE table having salary more than 1000 &#x2212;</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# Prepare SQL query to INSERT a record into the database.
+sql = &quot;SELECT * FROM EMPLOYEE \
+       WHERE INCOME &gt; &apos;%d&apos;&quot; % (1000)
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Fetch all the rows in a list of lists.
+   results = cursor.fetchall()
+   for row in results:
+      fname = row[0]
+      lname = row[1]
+      age = row[2]
+      sex = row[3]
+      income = row[4]
+      # Now print fetched result
+      print &quot;fname=%s,lname=%s,age=%d,sex=%s,income=%d&quot; % \
+             (fname, lname, age, sex, income )
+except:
+   print &quot;Error: unable to fecth data&quot;
+
+# disconnect from server
+db.close()
+</pre>
+<p>This will produce the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+fname=Mac, lname=Mohan, age=20, sex=M, income=2000
+</pre>
+<h2>Update Operation</h2>
+<p>UPDATE Operation on any database means to update one or more records, which are already available in the database.</p>
+<p>The following procedure updates all the records having SEX as <b>&apos;M&apos;</b>. Here, we increase AGE of all the males by one year.</p>
+<h3>Example</h3>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# Prepare SQL query to UPDATE required records
+sql = &quot;UPDATE EMPLOYEE SET AGE = AGE + 1
+                          WHERE SEX = &apos;%c&apos;&quot; % (&apos;M&apos;)
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Commit your changes in the database
+   db.commit()
+except:
+   # Rollback in case there is any error
+   db.rollback()
+
+# disconnect from server
+db.close()
+</pre>
+<h2>DELETE Operation</h2>
+<p>DELETE operation is required when you want to delete some records from your database. Following is the  procedure to delete all the records from EMPLOYEE where AGE is more than 20 &#x2212;</p>
+<h3>Example</h3>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+
+import MySQLdb
+
+# Open database connection
+db = MySQLdb.connect(&quot;localhost&quot;,&quot;testuser&quot;,&quot;test123&quot;,&quot;TESTDB&quot; )
+
+# prepare a cursor object using <i>cursor()</i> method
+cursor = db.cursor()
+
+# Prepare SQL query to DELETE required records
+sql = &quot;DELETE FROM EMPLOYEE WHERE AGE &gt; &apos;%d&apos;&quot; % (20)
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Commit your changes in the database
+   db.commit()
+except:
+   # Rollback in case there is any error
+   db.rollback()
+
+# disconnect from server
+db.close()
+</pre>
+<h2>Performing Transactions</h2>
+<p>Transactions are a mechanism that ensures data consistency. Transactions have the following four properties:</p>
+<ion-list>
+<li><p><b>Atomicity:</b> Either a transaction completes or nothing happens at all.</p></li>
+<li><p><b>Consistency:</b> A transaction must start in a consistent state and leave the system in a consistent state.</p></li>
+<li><p><b>Isolation:</b> Intermediate results of a transaction are not visible outside the current transaction.</p></li>
+<li><p><b>Durability:</b> Once a transaction was committed, the effects are persistent, even after a system failure.</p></li>
+</ion-list>
+<p>The Python DB API 2.0 provides two methods to either <i>commit</i> or <i>rollback</i> a transaction.</p>
+<h3>Example</h3>
+<p>You already know how to implement transactions. Here is again similar example &#x2212;</p>
+<pre class="prettyprint notranslate">
+# Prepare SQL query to DELETE required records
+sql = &quot;DELETE FROM EMPLOYEE WHERE AGE &gt; &apos;%d&apos;&quot; % (20)
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Commit your changes in the database
+   db.commit()
+except:
+   # Rollback in case there is any error
+   db.rollback()
+</pre>
+<h2>COMMIT Operation</h2>
+<p>Commit is the operation, which gives a green signal to database to finalize the changes, and after this operation, no change can be reverted back.</p>
+<p>Here is a simple example to call <b>commit</b> method.</p>
+<pre class="prettyprint notranslate">
+ db.commit()
+</pre> 
+<h2>ROLLBACK Operation</h2>
+<p>If you are not satisfied with one or more of the changes and you want to revert back those changes completely, then use <b>rollback()</b> method.</p>
+<p>Here is a simple example to call <b>rollback()</b> method.</p>
+<pre class="prettyprint notranslate">
+ db.rollback()
+</pre>
+<h2>Disconnecting Database</h2>
+<p>To disconnect Database connection, use close() method.</p>
+<pre class="prettyprint notranslate">
+ db.close()
+</pre>
+<p>If the connection to a database is closed by the user with the close() method, any outstanding transactions are rolled back by the DB. However, instead of depending on any of DB lower level implementation details, your application would be better off calling commit or rollback explicitly.</p>
+<h2>Handling Errors</h2>
+<p>There are many sources of errors. A few examples are a syntax error in an executed SQL statement, a connection failure, or calling the fetch method for an already canceled or finished statement handle.</p>
+<p>The DB API defines a number of errors that must exist in each database module. The following table lists these exceptions.</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:15%">Exception</th><th>Description</th>
+</tr>
+<tr><td>Warning</td><td>Used for non-fatal issues. Must subclass StandardError.</td></tr>
+<tr><td>Error</td><td>Base class for errors. Must subclass StandardError.</td></tr>
+<tr><td>InterfaceError</td><td>Used for errors in the database module, not the database itself. Must subclass Error.</td></tr>
+<tr><td>DatabaseError</td><td>Used for errors in the database. Must subclass Error.</td></tr>
+<tr><td>DataError</td><td>Subclass of DatabaseError that refers to errors in the data.</td></tr>
+<tr><td>OperationalError</td><td>Subclass of DatabaseError that refers to errors such as the loss of a connection to the database. These errors are generally outside of the control of the Python scripter.</td></tr>
+<tr><td>IntegrityError</td><td>Subclass of DatabaseError for situations that would damage the relational integrity, such as uniqueness constraints or foreign keys.</td></tr>
+<tr><td>InternalError</td><td>Subclass of DatabaseError that refers to errors internal to the database module, such as a cursor no longer being active.</td></tr>
+<tr><td>ProgrammingError</td><td>Subclass of DatabaseError that refers to errors such as a bad table name and other things that can safely be blamed on you.</td></tr>
+<tr><td>NotSupportedError</td><td>Subclass of DatabaseError that refers to trying to call unsupported functionality.</td></tr>
+</table>
+<p>Your Python scripts should handle these errors, but before using any of the above exceptions, make sure your MySQLdb has support for that exception. You can get more information about them by reading the DB API 2.0 specification.</p>
+
+</div>
+
+</ion-content>
+</ion-view>

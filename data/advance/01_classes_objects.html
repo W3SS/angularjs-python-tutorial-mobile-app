@@ -1,0 +1,376 @@
+<ion-view view-title="01 - Class Object">
+<ion-content style="margin:0 12px">
+<div class="col-md-7 middle-col">
+<h1>Class Object</h1>
+
+<hr>
+
+<p>Python has been an object-oriented language since it existed. Because of this, creating and using classes and objects are downright easy. This chapter helps you become an expert in using Python&apos;s object-oriented programming support.</p>
+<p>If you do not have any previous experience with object-oriented (OO) programming, you may want to consult an introductory course on it or at least a tutorial of some sort so that you have a grasp of the basic concepts.</p>
+<p>However, here is small introduction of Object-Oriented Programming (OOP) to bring you at speed &#x2212;</p>
+<h2>Overview of OOP Terminology</h2>
+<ion-list>
+<li><p><b>Class:</b>  A user-defined prototype for an object that defines a set of attributes that characterize any object of the class. The attributes are data members (class variables and instance variables) and methods, accessed via dot notation. </p></li>
+<li><p><b>Class variable:</b> A variable that is shared by all instances of a class. Class variables are defined within a class but outside any of the class&apos;s methods. Class variables are not used as frequently as instance variables are. </p></li>
+<li><p><b>Data member:</b> A class variable or instance variable that holds data associated with a class and its objects. </p></li>
+<li><p><b>Function overloading:</b> The assignment of more than one behavior to a particular function. The operation performed varies by the types of objects or arguments involved.</p></li>
+<li><p><b>Instance variable:</b> A variable that is defined inside a method and belongs only to the current instance of a class. </p></li>
+<li><p><b>Inheritance:</b> The transfer of the characteristics of a class to other classes that are derived from it. </p></li>
+<li><p><b>Instance:</b>  An individual object of a certain class. An object obj that belongs to a class Circle, for example, is an instance of the class Circle.</p></li>
+<li><p><b>Instantiation:</b> The creation of an instance of a class. </p></li>
+<li><p><b>Method :</b> A special kind of function that is defined in a class definition.</p></li>
+<li><p><b>Object:</b> A unique instance of a data structure that&apos;s defined by its class. An object comprises both data members (class variables and instance variables) and methods. </p></li>
+<li><p><b>Operator overloading:</b> The assignment of more than one function to a particular operator.</p></li>
+</ion-list>
+<h2>Creating Classes</h2>
+<p>The <i>class</i> statement creates a new class definition. The name of the class immediately follows the keyword <i>class</i> followed by a colon as follows &#x2212;</p>
+<pre class="prettyprint notranslate">
+class ClassName:
+   &apos;Optional class documentation string&apos;
+   class_suite
+</pre>
+<ion-list>
+<li><p>The class has a documentation string, which can be accessed via <i>ClassName.__doc__</i>.</p></li>
+<li><p>The <i>class_suite</i> consists of all the component statements defining class members, data attributes and functions.</p></li>
+</ion-list>
+<h3>Example</h3>
+<p>Following is the example of a simple Python class &#x2212;</p>
+<pre class="prettyprint notranslate">
+class Employee:
+   &apos;Common base class for all employees&apos;
+   empCount = 0
+
+   def __init__(self, name, salary):
+      self.name = name
+      self.salary = salary
+      Employee.empCount += 1
+   
+   def displayCount(self):
+     print &quot;Total Employee %d&quot; % Employee.empCount
+
+   def displayEmployee(self):
+      print &quot;Name : &quot;, self.name,  &quot;, Salary: &quot;, self.salary
+</pre>
+<ion-list>
+<li><p>The variable <i>empCount</i> is a class variable whose value is shared among all instances of a this class. This can be accessed as <i>Employee.empCount</i> from inside the class or outside the class.</p></li>
+<li><p>The first method <i>__init__()</i> is a special method, which is called class constructor or initialization method that Python calls when you create a new instance of this class.</p></li>
+<li><p>You declare other class methods like normal functions with the exception that the first argument to each method is <i>self</i>. Python adds the <i>self</i> argument to the list for you; you do not need to include it when you call the methods.</p></li>
+</ion-list>
+<h2>Creating Instance Objects</h2>
+<p>To create instances of a class, you call the class using class name and pass in whatever arguments its <i>__init__</i> method accepts.</p>
+<pre class="prettyprint notranslate">
+&quot;This would create first object of Employee class&quot;
+emp1 = Employee(&quot;Zara&quot;, 2000)
+&quot;This would create second object of Employee class&quot;
+emp2 = Employee(&quot;Manni&quot;, 5000)
+</pre>
+<h2>Accessing Attributes</h2>
+<p>You access the object&apos;s attributes using the dot operator with object. Class variable would be accessed using class name as follows &#x2212;</p>
+<pre class="prettyprint notranslate">
+emp1.displayEmployee()
+emp2.displayEmployee()
+print &quot;Total Employee %d&quot; % Employee.empCount
+</pre>
+<p>Now, putting all  the concepts together &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class Employee:
+   &apos;Common base class for all employees&apos;
+   empCount = 0
+
+   def __init__(self, name, salary):
+      self.name = name
+      self.salary = salary
+      Employee.empCount += 1
+   
+   def displayCount(self):
+     print &quot;Total Employee %d&quot; % Employee.empCount
+
+   def displayEmployee(self):
+      print &quot;Name : &quot;, self.name,  &quot;, Salary: &quot;, self.salary
+
+&quot;This would create first object of Employee class&quot;
+emp1 = Employee(&quot;Zara&quot;, 2000)
+&quot;This would create second object of Employee class&quot;
+emp2 = Employee(&quot;Manni&quot;, 5000)
+emp1.displayEmployee()
+emp2.displayEmployee()
+print &quot;Total Employee %d&quot; % Employee.empCount
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+Name :  Zara ,Salary:  2000
+Name :  Manni ,Salary:  5000
+Total Employee 2
+</pre>
+<p>You can add, remove, or modify attributes of classes and objects at any time &#x2212;</p>
+<pre class="prettyprint notranslate">
+emp1.age = 7  # Add an &apos;age&apos; attribute.
+emp1.age = 8  # Modify &apos;age&apos; attribute.
+del emp1.age  # Delete &apos;age&apos; attribute.
+</pre>
+<p>Instead of using the normal statements to access attributes, you can use the following functions &#x2212;</p>
+<ion-list>
+<li><p>The <b>getattr(obj, name[, default])</b> : to access the attribute of object.</p></li>
+<li><p>The <b>hasattr(obj,name)</b> : to check if an attribute exists or not.</p></li>
+<li><p>The <b>setattr(obj,name,value)</b> : to set an attribute. If attribute does not exist, then it would be created.</p></li>
+<li><p>The <b>delattr(obj, name)</b> : to delete an attribute.</p></li>
+</ion-list>
+<pre class="prettyprint notranslate">
+hasattr(emp1, &apos;age&apos;)    # Returns true if &apos;age&apos; attribute exists
+getattr(emp1, &apos;age&apos;)    # Returns value of &apos;age&apos; attribute
+setattr(emp1, &apos;age&apos;, 8) # Set attribute &apos;age&apos; at 8
+delattr(empl, &apos;age&apos;)    # Delete attribute &apos;age&apos;
+</pre>
+<h2>Built-In Class Attributes</h2>
+<p>Every Python class keeps following built-in attributes and they can be accessed using dot operator like any other attribute &#x2212;</p>
+<ion-list>
+<li><p><b>__dict__:</b> Dictionary containing the class&apos;s namespace.</p></li>
+<li><p><b>__doc__:</b> Class documentation string or none, if undefined. </p></li>
+<li><p><b>__name__:</b> Class name. </p></li>
+<li><p><b>__module__:</b> Module name in which the class is defined. This attribute is &quot;__main__&quot; in interactive mode. </p></li>
+<li><p><b>__bases__:</b> A possibly empty tuple containing the base classes, in the order of their occurrence in the base class list.</p></li>
+</ion-list>
+<p>For the above class let us try to access all these attributes &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class Employee:
+   &apos;Common base class for all employees&apos;
+   empCount = 0
+
+   def __init__(self, name, salary):
+      self.name = name
+      self.salary = salary
+      Employee.empCount += 1
+   
+   def displayCount(self):
+     print &quot;Total Employee %d&quot; % Employee.empCount
+
+   def displayEmployee(self):
+      print &quot;Name : &quot;, self.name,  &quot;, Salary: &quot;, self.salary
+
+print &quot;Employee.__doc__:&quot;, Employee.__doc__
+print &quot;Employee.__name__:&quot;, Employee.__name__
+print &quot;Employee.__module__:&quot;, Employee.__module__
+print &quot;Employee.__bases__:&quot;, Employee.__bases__
+print &quot;Employee.__dict__:&quot;, Employee.__dict__
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+Employee.__doc__: Common base class for all employees
+Employee.__name__: Employee
+Employee.__module__: __main__
+Employee.__bases__: ()
+Employee.__dict__: {&apos;__module__&apos;: &apos;__main__&apos;, &apos;displayCount&apos;:
+&lt;function displayCount at 0xb7c84994&gt;, &apos;empCount&apos;: 2, 
+&apos;displayEmployee&apos;: &lt;function displayEmployee at 0xb7c8441c&gt;, 
+&apos;__doc__&apos;: &apos;Common base class for all employees&apos;, 
+&apos;__init__&apos;: &lt;function __init__ at 0xb7c846bc&gt;}
+</pre>
+<h2>Destroying Objects (Garbage Collection)</h2>
+<p>Python deletes unneeded objects (built-in types or class instances) automatically to free the memory space. The process by which Python periodically reclaims blocks of memory that no longer are in use is termed Garbage Collection.</p>
+<p>Python&apos;s garbage collector runs during program execution and is triggered when an object&apos;s reference count reaches zero. An object&apos;s reference count changes as the number of aliases that point to it changes.</p>
+<p>An object&apos;s reference count increases when it is assigned a new name or placed in a container (list, tuple, or dictionary). The object&apos;s reference count decreases when it&apos;s deleted with <i>del</i>, its reference is reassigned, or its reference goes out of scope. When an object&apos;s reference count reaches zero, Python collects it automatically.</p>
+<pre class="prettyprint notranslate">
+a = 40      # Create object &lt;40&gt;
+b = a       # Increase ref. count  of &lt;40&gt; 
+c = [b]     # Increase ref. count  of &lt;40&gt; 
+
+del a       # Decrease ref. count  of &lt;40&gt;
+b = 100     # Decrease ref. count  of &lt;40&gt; 
+c[0] = -1   # Decrease ref. count  of &lt;40&gt; 
+</pre>
+<p>You normally will not notice when the garbage collector destroys an orphaned instance and reclaims its space. But a class can implement the special method <i>__del__()</i>, called a destructor, that is invoked when the instance is about to be destroyed. This method might be used to clean up any non memory resources used by an instance.</p>
+<h3>Example</h3>
+<p>This __del__() destructor prints the class name of an instance that is about to be destroyed &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class Point:
+   def __init( self, x=0, y=0):
+      self.x = x
+      self.y = y
+   def __del__(self):
+      class_name = self.__class__.__name__
+      print class_name, &quot;destroyed&quot;
+
+pt1 = Point()
+pt2 = pt1
+pt3 = pt1
+print id(pt1), id(pt2), id(pt3) # prints the ids of the obejcts
+del pt1
+del pt2
+del pt3
+</pre>
+<p>When the above code is  executed, it produces following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+3083401324 3083401324 3083401324
+Point destroyed
+</pre>
+<p><b>Note:</b> Ideally, you should define your classes in separate file, then you should import them in your main program file using <i>import</i> statement.</p>
+<h2>Class Inheritance</h2>
+<p>Instead of starting from scratch, you can create a class by deriving it from a preexisting class by listing the parent class in parentheses after the new class name.</p>
+<p>The child class inherits the attributes of its parent class, and you can use those attributes as if they were defined in the child class. A child class can also override data members and methods from the parent.</p>
+<h3>Syntax</h3>
+<p>Derived classes are declared much like their parent class; however, a list of base classes to inherit from is given after the class name &#x2212;</p>
+<pre class="prettyprint notranslate">
+class SubClassName (ParentClass1[, ParentClass2, ...]):
+   &apos;Optional class documentation string&apos;
+   class_suite
+</pre>
+<h3>Example</h3>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class Parent:        # define parent class
+   parentAttr = 100
+   def __init__(self):
+      print &quot;Calling parent constructor&quot;
+
+   def parentMethod(self):
+      print &apos;Calling parent method&apos;
+
+   def setAttr(self, attr):
+      Parent.parentAttr = attr
+
+   def getAttr(self):
+      print &quot;Parent attribute :&quot;, Parent.parentAttr
+
+class Child(Parent): # define child class
+   def __init__(self):
+      print &quot;Calling child constructor&quot;
+
+   def childMethod(self):
+      print &apos;Calling child method&apos;
+
+c = Child()          # instance of child
+c.childMethod()      # child calls its method
+c.parentMethod()     # calls parent&apos;s method
+c.setAttr(200)       # again call parent&apos;s method
+c.getAttr()          # again call parent&apos;s method
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+Calling child constructor
+Calling child method
+Calling parent method
+Parent attribute : 200
+</pre>
+<p>Similar way, you can drive a class from multiple parent classes as follows &#x2212;</p>
+<pre class="prettyprint notranslate">
+class A:        # define your class A
+.....
+
+class B:         # define your calss B
+.....
+
+class C(A, B):   # subclass of A and B
+.....
+</pre>
+<p>You can use issubclass() or isinstance() functions to check a relationships of two classes and instances.</p>
+<ion-list>
+<li><p>The <b>issubclass(sub, sup)</b> boolean function returns true if the given subclass <b>sub</b> is indeed a subclass of the superclass <b>sup</b>.</p></li>
+<li><p>The <b>isinstance(obj, Class)</b> boolean function returns true if <i>obj</i> is an instance of class <i>Class</i> or is an instance of a subclass of Class</p></li>
+</ion-list>
+<h2>Overriding Methods</h2>
+<p>You can always override your parent class methods. One reason for overriding parent&apos;s methods is because you may want special or different functionality in your subclass.</p>
+<h3>Example</h3>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class Parent:        # define parent class
+   def myMethod(self):
+      print &apos;Calling parent method&apos;
+
+class Child(Parent): # define child class
+   def myMethod(self):
+      print &apos;Calling child method&apos;
+
+c = Child()          # instance of child
+c.myMethod()         # child calls overridden method
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+Calling child method
+</pre>
+<h2>Base Overloading Methods</h2>
+<p>Following table lists some generic functionality that you can override in your own classes &#x2212;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:10%">SN</th><th>Method, Description &amp; Sample Call</th>
+</tr>
+<tr><td>1</td><td><b>__init__ ( self [,args...] )</b><br>Constructor (with any optional arguments)<br>Sample Call : <i>obj = className(args)</i></td></tr>
+<tr><td>2</td><td><b>__del__( self )</b><br>Destructor, deletes an object<br>Sample Call : <i>del obj</i></td></tr>
+<tr><td>3</td><td><b>__repr__( self )</b><br>Evaluatable string representation<br>Sample Call : <i>repr(obj)</i></td></tr>
+<tr><td>4</td><td><b>__str__( self )</b><br>Printable string representation<br>Sample Call : <i>str(obj)</i></td></tr>
+<tr><td>5</td><td><b>__cmp__ ( self, x )</b><br>Object comparison<br>Sample Call : <i>cmp(obj, x)</i></td></tr>
+</table>
+<h2>Overloading Operators</h2>
+<p>Suppose you have created a Vector class to represent two-dimensional vectors, what happens when you use the plus operator to add them? Most likely Python will yell at you.</p>
+<p>You could, however, define the <i>__add__</i> method in your class to perform vector addition and then the plus operator would behave as per expectation &#x2212;</p>
+<h3>Example</h3>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class Vector:
+   def __init__(self, a, b):
+      self.a = a
+      self.b = b
+
+   def __str__(self):
+      return &apos;Vector (%d, %d)&apos; % (self.a, self.b)
+   
+   def __add__(self,other):
+      return Vector(self.a + other.a, self.b + other.b)
+
+v1 = Vector(2,10)
+v2 = Vector(5,-2)
+print v1 + v2
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+Vector(7,8)
+</pre>
+<h2>Data Hiding</h2>
+<p>An object&apos;s attributes may or may not be visible outside the class definition. You need to name attributes with a double underscore prefix, and those attributes then are not be directly visible to outsiders.</p>
+<h3>Example</h3>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+class JustCounter:
+   __secretCount = 0
+  
+   def count(self):
+      self.__secretCount += 1
+      print self.__secretCount
+
+counter = JustCounter()
+counter.count()
+counter.count()
+print counter.__secretCount
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+1
+2
+Traceback (most recent call last):
+  File &quot;test.py&quot;, line 12, in &lt;module&gt;
+    print counter.__secretCount
+AttributeError: JustCounter instance has no attribute &apos;__secretCount&apos;
+</pre>
+<p>Python protects those members by internally changing the name to include the class name. You can access such attributes as <i>object._className__attrName</i>. If you would replace your last line as following, then it works for you &#x2212;</p>
+<pre class="prettyprint notranslate">
+.........................
+print counter._JustCounter__secretCount
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+1
+2
+2
+</pre>
+</div>
+</ion-content>
+</ion-view>

@@ -1,0 +1,52 @@
+<ion-view view-title="06 - Decision Making">
+<ion-content style="margin:0 12px">
+
+<div class="col-md-7 middle-col">
+<h1>Decision Making</h1>
+
+<hr>
+
+<p>Decision making is anticipation of conditions occurring while execution of the program and specifying actions taken according to the conditions.</p>
+<p>Decision structures evaluate multiple expressions which produce TRUE or FALSE as outcome. You need to determine which action to take and which statements to execute if outcome is TRUE or FALSE otherwise.</p>
+<!-- <p>Following is the general form of a typical decision making structure found in most of the programming languages &#x2212;</p>
+<img src="/python/images/decision_making.jpg" alt="Decision making statements in Python"> -->
+<p>Python programming language assumes any <b>non-zero</b> and <b>non-null</b> values as TRUE, and if it is either <b>zero</b> or <b>null</b>, then it is assumed as FALSE value.</p>
+<p>Python programming language provides following types of decision making statements. Click the following links to check their detail.</p>
+<table class="table table-bordered">
+<tr><th style="width:35%">Statement</th><th>Description</th></tr>
+<tr><td><p>
+<!-- <a href="/python/python_if_statement.htm" title="Python IF Statements">if statements</a> -->
+if statements
+</p></td><td>An <b>if statement</b> consists of a boolean expression followed by one or more statements.</td></tr>
+<tr><td><p>
+<!-- <a href="/python/python_if_else.htm" title="Python IF...ELIF...ELSE Statements">if...else statements</a> -->
+if...else statements
+</p></td><td>An <b>if statement</b> can be followed by an optional <b>else statement</b>, which executes when the boolean expression is FALSE.</td></tr>
+<tr><td><p>
+<!-- <a href="/python/nested_if_statements_in_python.htm" title="nested if statements in Python">nested if statements</a>
+ -->nested if statements
+</p></td><td>You can use one <b>if</b> or <b>else if</b> statement inside another <b>if</b> or <b>else if</b> statement(s).</td></tr>
+</table>
+<p>Let us go through each decision making briefly &#x2212;</p>
+<h2>Single Statement Suites</h2>
+<p>If the suite of an <b>if</b> clause consists only of a single line, it may go on the same line as the header statement.</p>
+<p>Here is an example of a <b>one-line if</b> clause &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+var = 100
+
+if ( var  == 100 ) : print &quot;Value of expression is 100&quot;
+
+print &quot;Good bye!&quot;
+</pre>
+<p>When the above code is executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+Value of expression is 100
+Good bye!
+</pre>
+
+</div>
+
+</ion-content>
+</ion-view>

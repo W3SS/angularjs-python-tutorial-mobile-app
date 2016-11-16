@@ -1,0 +1,147 @@
+<ion-view view-title="05 - Network Programming">
+<ion-content style="margin:0 12px">
+
+<div class="col-md-7 middle-col">
+<h1>Network Programming</h1>
+
+<hr>
+
+<p>Python provides two levels of access to network services. At a low level, you can access the basic socket support in the underlying operating system, which allows you to implement clients and servers for both connection-oriented and connectionless protocols.</p>
+<p>Python also has libraries that provide higher-level access to specific application-level network protocols, such as FTP, HTTP, and so on.</p>
+<p>This chapter gives you understanding on most famous concept in Networking - Socket Programming.</p>
+<h2>What is Sockets?</h2>
+<p>Sockets are the endpoints of a bidirectional communications channel. Sockets may communicate within a process, between processes on the same machine, or between processes on different continents.</p>
+<p>Sockets may be implemented over a number of different channel types: Unix domain sockets, TCP, UDP, and so on. The <i>socket</i> library provides specific classes for handling the common transports as well as a generic interface for handling the rest.</p>
+<p>Sockets have their own vocabulary:</p>
+<table class="table table-bordered">
+<tr><th style="width:20%">Term</th><th>Description</th></tr>
+<tr><td>domain</td><td>The family of protocols that is used as the transport mechanism. These values are constants such as AF_INET, PF_INET, PF_UNIX, PF_X25, and so on.</td></tr>
+<tr><td>type</td><td>The type of communications between the two endpoints, typically SOCK_STREAM for connection-oriented protocols and SOCK_DGRAM for connectionless protocols.</td></tr>
+<tr><td>protocol</td><td>Typically zero, this may be used to identify a variant of a protocol within a domain and type.</td></tr>
+<tr><td>hostname</td><td>The identifier of a network interface:
+<ion-list>
+<li>A string, which can be a host name, a dotted-quad address, or an IPV6 address in colon (and possibly dot) notation</li>
+<li>A string &quot;&lt;broadcast&gt;&quot;, which specifies an INADDR_BROADCAST address.</li>
+<li>A zero-length string, which specifies INADDR_ANY, or</li>
+<li>An Integer, interpreted as a binary address in host byte order.</li>
+</ion-list></td></tr>
+<tr><td>port</td><td>Each server listens for clients calling on one or more ports. A port may be a Fixnum port number, a string containing a port number, or the name of a service.</td></tr>
+</table>
+<h2>The <i>socket</i> Module</h2>
+<p>To create a socket, you must use the <i>socket.socket()</i> function available in <i>socket</i> module, which has the general syntax &#x2212;</p>
+<pre class="prettyprint notranslate">
+s = socket.socket (socket_family, socket_type, protocol=0)
+</pre>
+<p>Here is the description of the parameters &#x2212;</p>
+<ion-list>
+<li><p><b>socket_family:</b> This is either AF_UNIX or AF_INET, as explained earlier.</p></li>
+<li><p><b>socket_type:</b> This is either SOCK_STREAM or SOCK_DGRAM.</p></li>
+<li><p><b>protocol:</b> This is usually left out, defaulting to 0.</p></li>
+</ion-list>
+<p>Once you have <i>socket</i> object, then you can use required functions to create your client or server program. Following is the list of functions required &#x2212;</p>
+<h2>Server Socket Methods</h2>
+<table class="table table-bordered">
+<tr>
+<th style="width:20%">Method</th><th>Description</th></tr>
+<tr><td>s.bind()</td><td> This method binds address (hostname, port number pair) to socket.</td></tr>
+<tr><td>s.listen()</td><td>This method sets up and start TCP listener.</td></tr>
+<tr><td>s.accept()</td><td>This passively accept TCP client connection, waiting until connection arrives (blocking).</td></tr>
+</table>
+<h2>Client Socket Methods</h2>
+<table class="table table-bordered">
+<tr>
+<th style="width:20%">Method</th><th>Description</th></tr>
+<tr><td>s.connect()</td><td> This method actively initiates TCP server connection.</td></tr>
+</table>
+<h2>General Socket Methods</h2>
+<table class="table table-bordered">
+<tr>
+<th style="width:25%">Method</th><th>Description</th></tr>
+<tr><td>s.recv()</td><td> This method receives TCP message</td></tr>
+<tr><td>s.send()</td><td> This method transmits TCP message</td></tr>
+<tr><td>s.recvfrom()</td><td> This method receives UDP message</td></tr>
+<tr><td>s.sendto()</td><td> This method transmits UDP message</td></tr>
+<tr><td>s.close()</td><td> This method closes socket</td></tr>
+<tr><td>socket.gethostname()</td><td>Returns the hostname.</td></tr>
+</table>
+<h2>A Simple Server</h2>
+<p>To write Internet servers, we use the <b>socket</b> function available in socket module to create a socket object. A socket object is then used to call other functions to setup a socket server.</p>
+<p>Now call <b>bind(hostname, port)</b> function to specify a <i>port</i> for your service on the given host.</p>
+<p>Next, call the <i>accept</i> method of the returned object. This method waits until a client connects to the port you specified, and then returns a <i>connection</i> object that represents the connection to that client.</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python           # This is server.py file
+
+import socket               # Import socket module
+
+s = socket.socket()         # Create a socket object
+host = socket.gethostname() # Get local machine name
+port = 12345                # Reserve a port for your service.
+s.bind((host, port))        # Bind to the port
+
+s.listen(5)                 # Now wait for client connection.
+while True:
+   c, addr = s.accept()     # Establish connection with client.
+   print &apos;Got connection from&apos;, addr
+   c.send(&apos;Thank you for connecting&apos;)
+   c.close()                # Close the connection
+</pre>
+<h2>A Simple Client</h2>
+<p>Let us write a very simple client program which opens a connection to a given port 12345 and given host. This is very simple to create a socket client using Python&apos;s <i>socket</i> module function.</p>
+<p>The <b>socket.connect(hosname, port )</b> opens a TCP connection to <i>hostname</i> on the <i>port</i>. Once you have a socket open, you can read from it like any IO object. When done, remember to close it, as you would close a file.</p>
+<p>The following code is a very simple client that connects to a given host and port, reads any available data from the socket, and then exits &#x2212;</p>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python           # This is client.py file
+
+import socket               # Import socket module
+
+s = socket.socket()         # Create a socket object
+host = socket.gethostname() # Get local machine name
+port = 12345                # Reserve a port for your service.
+
+s.connect((host, port))
+print s.recv(1024)
+s.close                     # Close the socket when done
+</pre>
+<p>Now run this server.py in background and then run above client.py to see the result.</p>
+<pre class="prettyprint notranslate">
+# Following would start a server in background.
+$ python server.py &amp; 
+
+# Once server is started run client as follows:
+
+$ python client.py
+</pre>
+<p>This would produce following result &#x2212;</p>
+<pre class="prettyprint notranslate">
+Got connection from (&apos;127.0.0.1&apos;, 48437)
+Thank you for connecting
+</pre>
+<h2>Python Internet modules</h2>
+<p>A list of some important modules in Python Network/Internet programming.</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:10%">Protocol</th><th style="width:30%">Common function</th><th style="width:15%">Port No</th><th>Python module</th>
+</tr>
+<tr><td>HTTP</td><td>Web pages</td><td>80</td><td>httplib, urllib, xmlrpclib</td></tr>
+<tr><td>NNTP</td><td>Usenet news</td><td>119</td><td>nntplib</td></tr>
+<tr><td>FTP</td><td>File transfers</td><td>20</td><td>ftplib, urllib</td></tr>
+<tr><td>SMTP</td><td>Sending email</td><td>25</td><td>smtplib</td></tr>
+<tr><td>POP3</td><td>Fetching email</td><td>110</td><td>poplib</td></tr>
+<tr><td>IMAP4</td><td>Fetching email</td><td>143</td><td>imaplib</td></tr>
+<tr><td>Telnet</td><td>Command lines</td><td>23</td><td>telnetlib</td></tr>
+<tr><td>Gopher</td><td>Document transfers</td><td>70</td><td>gopherlib, urllib</td></tr>
+</table>
+<p>Please check all the libraries  mentioned above to work with FTP, SMTP, POP, and IMAP protocols.</p>
+<h2>Further Readings</h2>
+<p>This was a quick start with Socket Programming. It is a vast subject. It is recommended to go through the topic to find more detail &#x2212;</p>
+<ion-list>
+<li><p>
+<!-- <a href="/unix_sockets/index.htm" title="Unix Socket Programming">Unix Socket Programming</a> --> Unix Socket Programming
+.</p></li>
+<li><p><a ng-click="openMarket('http://docs.python.org/3.0/library/socket.html')">Python Socket Library and Modules</a>.</p></li>
+</ion-list>
+
+</div>
+
+</ion-content>
+</ion-view>

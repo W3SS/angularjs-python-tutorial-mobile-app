@@ -1,0 +1,161 @@
+<ion-view view-title="10 - Lists">
+<ion-content style="margin:0 12px">
+
+
+<div class="col-md-7 middle-col">
+<h1>Python Lists</h1>
+
+<hr>
+
+<p>The most basic data structure in Python is the <b>sequence</b>. Each element of a sequence is assigned a number - its position or index. The first index is zero, the second index is one, and so forth.</p>
+<p>Python has six built-in types of sequences, but the most common ones are lists and tuples, which we would see in this tutorial.</p>
+<p>There are certain things you can do with all sequence types. These operations include indexing, slicing, adding, multiplying, and checking for membership. In addition, Python has built-in functions for finding the length of a sequence and for finding its largest and smallest elements.</p>
+<h2>Python Lists</h2>
+<p>The list is a most versatile datatype available in Python which can be written as a list of comma-separated values (items) between square brackets. Important thing about a list is that items in a list need not be of the same type.</p>
+<p>Creating a list is as simple as putting different comma-separated values between square brackets. For example &#x2212;</p>
+<pre class="prettyprint notranslate">
+list1 = [&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000];
+list2 = [1, 2, 3, 4, 5 ];
+list3 = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]
+</pre>
+<p>Similar to string indices, list indices start at 0, and lists can be sliced, concatenated and so on.</p>
+<h2>Accessing Values in Lists</h2>
+<p>To access values in lists, use the square brackets for slicing along with the index or indices to obtain value available at that index. For example &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+list1 = [&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000];
+list2 = [1, 2, 3, 4, 5, 6, 7 ];
+
+print &quot;list1[0]: &quot;, list1[0]
+print &quot;list2[1:5]: &quot;, list2[1:5]
+</pre>
+<p>When the above code is executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+list1[0]:  physics
+list2[1:5]:  [2, 3, 4, 5]
+</pre>
+<h2>Updating Lists</h2>
+<p>You can update single or multiple elements of lists by giving the slice on the left-hand side of the assignment operator, and you can add to elements in a list with the append() method. For example &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+list = [&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000];
+
+print &quot;Value available at index 2 : &quot;
+print list[2]
+list[2] = 2001;
+print &quot;New value available at index 2 : &quot;
+print list[2]
+</pre>
+<p><b>Note:</b> append() method is discussed in subsequent section.</p><p>
+</p><p>When the above code is executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+Value available at index 2 :
+1997
+New value available at index 2 :
+2001
+</pre>
+<h2>Delete List Elements</h2>
+<p>To remove a list element, you can use either the del statement if you know exactly which element(s) you are deleting or the remove() method if you do not know. For example &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+list1 = [&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000];
+
+print list1
+del list1[2];
+print &quot;After deleting value at index 2 : &quot;
+print list1
+</pre>
+<p>When the above code is executed, it produces following result &#x2212;</p>
+<pre class="result notranslate">
+[&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000]
+After deleting value at index 2 :
+[&apos;physics&apos;, &apos;chemistry&apos;, 2000]
+</pre>
+<p><b>Note:</b> remove() method is discussed in subsequent section.</p>
+<h2>Basic List Operations</h2>
+<p>Lists respond to the + and * operators much like strings; they mean concatenation and repetition here too, except that the result is a new list, not a string.</p>
+<p>In fact, lists respond to all of the general sequence operations we used on strings in the prior chapter.</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:33%">Python Expression</th><th style="width:33%">Results </th><th style="width:33%"> Description</th></tr>
+<tr><td>len([1, 2, 3])</td><td>3</td><td>Length</td></tr>
+<tr><td>[1, 2, 3] + [4, 5, 6]</td><td>[1, 2, 3, 4, 5, 6]</td><td>Concatenation</td></tr>
+<tr><td>[&apos;Hi!&apos;] * 4</td><td>[&apos;Hi!&apos;, &apos;Hi!&apos;, &apos;Hi!&apos;, &apos;Hi!&apos;]</td><td>Repetition</td></tr>
+<tr><td>3 in [1, 2, 3]</td><td>True</td><td>Membership</td></tr>
+<tr><td>for x in [1, 2, 3]: print x,</td><td>1 2 3</td><td>Iteration</td></tr>
+</table>
+<h2>Indexing, Slicing, and Matrixes</h2>
+<p>Because lists are sequences, indexing and slicing work the same way for lists as they do for strings.</p>
+<p>Assuming following input &#x2212;</p>
+<pre class="prettyprint notranslate">
+L = [&apos;spam&apos;, &apos;Spam&apos;, &apos;SPAM!&apos;]
+</pre>
+<p>&#xA0;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:33%">Python Expression</th><th style="width:33%">Results </th><th style="width:33%"> Description</th></tr>
+<tr><td>L[2]</td><td>&apos;SPAM!&apos;</td><td>Offsets start at zero</td></tr>
+<tr><td>L[-2]</td><td>&apos;Spam&apos;</td><td>Negative: count from the right</td></tr>
+<tr><td>L[1:]</td><td>[&apos;Spam&apos;, &apos;SPAM!&apos;]</td><td>Slicing fetches sections</td></tr>
+</table>
+<h2>Built-in List Functions &amp; Methods:</h2>
+<p>Python includes the following list functions &#x2212;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:5%">SN</th><th style="width:95%">Function with Description</th></tr>
+<tr><td>1</td><td><p>
+<!-- <a href="/python/list_cmp.htm">cmp(list1, list2)</a> --> cmp(list1, list2)
+</p>Compares elements of both lists.</td></tr>
+<tr><td>2</td><td><p>
+<!-- <a href="/python/list_len.htm">len(list)</a> --> len(list)
+</p>Gives the total length of the list.</td></tr>
+<tr><td>3</td><td><p>
+<!-- <a href="/python/list_max.htm">max(list)</a> --> max(list)
+</p><br>Returns item from the list with max value.</td></tr>
+<tr><td>4</td><td><p>
+<!-- <a href="/python/list_min.htm">min(list)</a> --> min(list)
+</p>Returns item from the list with min value.</td></tr>
+<tr><td>5</td><td><p>
+<!-- <a href="/python/list_list.htm">list(seq)</a> --> list(seq)
+</p>Converts a tuple into list.</td></tr>
+</table>
+<p>Python includes following list methods</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:5%">SN</th><th style="width:95%">Methods with Description</th></tr>
+<tr><td>1</td><td><p>
+<!-- <a href="/python/list_append.htm">list.append(obj)</a> --> list.append(obj)
+</p>Appends object obj to list</td></tr>
+<tr><td>2</td><td><p>
+<!-- <a href="/python/list_count.htm">list.count(obj)</a> --> list.count(obj)
+</p>Returns count of how many times obj occurs in list</td></tr>
+<tr><td>3</td><td><p>
+<!-- <a href="/python/list_extend.htm">list.extend(seq)</a> --> list.extend(seq)
+</p>Appends the contents of seq to list</td></tr>
+<tr><td>4</td><td><p>
+<!-- <a href="/python/list_index.htm">list.index(obj)</a> --> list.index(obj)
+</p>Returns the lowest index in list that obj appears</td></tr>
+<tr><td>5</td><td><p>
+<!-- <a href="/python/list_insert.htm">list.insert(index, obj)</a> --> list.insert(index, obj)
+</p>Inserts object obj into list at offset index</td></tr>
+<tr><td>6</td><td><p>
+<!-- <a href="/python/list_pop.htm">list.pop(obj=list[-1])</a> --> list.pop(obj=list[-1])
+</p>Removes and returns last object or obj from list</td></tr>
+<tr><td>7</td><td><p>
+<!-- <a href="/python/list_remove.htm">list.remove(obj)</a> --> list.remove(obj)
+</p>Removes object obj from list</td></tr>
+<tr><td>8</td><td><p>
+<!-- <a href="/python/list_reverse.htm">list.reverse()</a> --> list.reverse()
+</p>Reverses objects of list in place</td></tr>
+<tr><td>9</td><td><p>
+<!-- <a href="/python/list_sort.htm">list.sort([func])</a> --> list.sort([func])
+</p>Sorts objects of list, use compare func if given</td></tr>
+</table>
+
+
+</div>
+</ion-content>
+</ion-view>

@@ -1,0 +1,138 @@
+<ion-view view-title="02 - Environment Setup">
+<ion-content style="margin:0 12px">
+
+<div class="col-md-7 middle-col">
+<h1>Environment Setup</h1>
+<hr>
+<p>Python 3 is available on for Windows, Mac OS and most of the flavours of Linux operating system. Even though Python 2 is available for many other OSs, Python 3 support either has not been made available for them or has been dropped.</p>
+<h2>Local Environment Setup</h2>
+<p>Open a terminal window and type &quot;python&quot; to find out if it is already installed and which version is installed.</p>
+
+<h2>Getting Python</h2>
+<p><b>Windows platform</b></p>
+<p>Binaries of latest version of Python 3 (Python 3.5.1) are available on <a ng-click="openMarket('https://www.python.org/downloads/windows/')">this download page</a></p>
+<p>Following different installation options are available</p>
+<ion-list>
+<li>Windows x86-64 embeddable zip file</li>
+<li>Windows x86-64 executable installer</li>
+<li>Windows x86-64 web-based installer</li>
+<li>Windows x86 embeddable zip file</li>
+<li>Windows x86 executable installer</li>
+<li>Windows x86 web-based installer</li>
+</ion-list>
+<p><b>Note:</b>In order to install Python 3.5.1, minimum OS requirements are Windows 7 with SP1. For versions 3.0 to 3.4.x Windows XP is aceeptable.</p>
+<p><b>Linux platform</b></p>
+<p>Different flavours of Linux use different package managers for installation of new packages.</p>
+<p>On Ubuntu Linux Python 3 is installed using following command from terminal</p>
+<pre class="prettyprint notranslate">
+$sudo apt-get install python3-minimal
+</pre>
+<p>Installation from source</p>
+<pre class="prettyprint notranslate">
+Download Gzipped source tarball from Python&apos;s download URL : <a ng-click="openMarket('https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz')">https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz</a>
+Extract the tarball
+tar xvfz Python-3.5.1.tgz
+Configure and Install:
+cd Python-3.5.1
+./configure --prefix=/opt/python3.5.1
+make  
+sudo make install
+</pre>
+<p><b>Mac OS</b></p>
+<p>Download Mac OS installers from this URL: <a ng-click="openMarket('https://www.python.org/downloads/mac-osx/')">https://www.python.org/downloads/mac-osx/</a></p>
+<ion-list>
+<li>Mac OS X 64-bit/32-bit installer : python-3.5.1-macosx10.6.pkg</li>
+<li>Mac OS X 32-bit i386/PPC installer : python-3.5.1-macosx10.5.pkg</li>
+</ion-list>
+<p>Double click this package file and follow wizard instructions to install.</p>
+
+<p>The most up-to-date and current source code, binaries, documentation, news, etc., is available on the official website of Python:</p>
+<p><b>Python Official Website :</b> <a rel="nofollow" ng-click="openMarket('http://www.python.org/')">http://www.python.org/</a></p>
+<p>You can download Python documentation from the following site. The documentation is available in HTML, PDF and PostScript formats.</p>
+<p><b>Python Documentation Website :</b> <a ng-click="openMarket('http://www.python.org/doc/')">www.python.org/doc/</a></p>
+<h2>Setting up PATH</h2>
+<p>Programs and other executable files can be in many directories, so operating systems provide a search path that lists the directories that the OS searches for executables.</p>
+<p>The path is stored in an environment variable, which is a named string maintained by the operating system. This variable contains information available to the command shell and other programs.</p>
+<p>The <b>path</b> variable is named as PATH in Unix or Path in Windows (Unix is case-sensitive; Windows is not).</p>
+<p>In Mac OS, the installer handles the path details. To invoke the Python interpreter from any particular directory, you must add the Python directory to your path.</p>
+<h2>Setting path at Unix/Linux</h2>
+<p>To add the Python directory to the path for a particular session in Unix:</p>
+<ion-list>
+<li><p><b>In the csh shell:</b> type setenv PATH &quot;$PATH:/usr/local/bin/python3&quot; and press Enter.</p></li>
+<li><p><b>In the bash shell (Linux):</b> type export PYTHONPATH=/usr/local/bin/python3.4 and press Enter.</p></li>
+<li><p><b>In the sh or ksh shell:</b> type PATH=&quot;$PATH:/usr/local/bin/python3&quot; and press Enter.</p></li>
+</ion-list>
+<p><b>Note:</b> /usr/local/bin/python3 is the path of the Python directory </p>
+<h2>Setting path at Windows</h2>
+<p>To add the Python directory to the path for a particular session in Windows:</p>
+<ion-list>
+<li><p><b>At the command prompt :</b> type <br>path %path%;C:\Python and press Enter.</p></li>
+</ion-list>
+<p><b>Note:</b> C:\Python is the path of the Python directory </p>
+<h2>Python Environment Variables</h2>
+<p>Here are important environment variables, which can be recognized by Python:</p>
+<table class="table table-bordered">
+<tr><th>Variable</th><th>Description</th></tr>
+<tr><td>PYTHONPATH</td><td>It has a role similar to PATH. This variable tells the Python interpreter where to locate the module files imported into a program. It should include the Python source library directory and the directories containing Python source code. PYTHONPATH is sometimes preset by the Python installer.</td></tr>
+<tr><td>PYTHONSTARTUP </td><td>It contains the path of an initialization file containing Python source code. It is executed every time you start the interpreter. It is named as .pythonrc.py in Unix and it contains commands that load utilities or modify PYTHONPATH.</td></tr>
+<tr><td>PYTHONCASEOK</td><td>It is used in Windows to instruct Python to find the first case-insensitive match in an import statement. Set this variable to any value to activate it.</td></tr>
+<tr><td>PYTHONHOME</td><td>It is an alternative module search path. It is usually embedded in the PYTHONSTARTUP or PYTHONPATH directories to make switching module libraries easy.</td></tr>
+</table>
+<h2>Running Python</h2>
+<p>There are three different ways to start Python:</p>
+<h2>(1) Interactive Interpreter:</h2>
+<p>You can start Python from Unix, DOS, or any other system that provides you a command-line interpreter or shell window.</p>
+<p>Enter <b>python</b> the command line.</p>
+<p>Start coding right away in the interactive interpreter.</p>
+<pre class="prettyprint notranslate">
+$python             # Unix/Linux
+
+or 
+
+python%             # Unix/Linux
+
+or 
+
+C:&gt;python           # Windows/DOS
+</pre>
+<p>Here is the list of all the available command line options:</p>
+<table class="table table-bordered">
+<tr>
+<th>Option</th><th>Description</th>
+</tr>
+<tr><td>-d</td><td>provide debug output</td></tr>
+<tr><td>-O</td><td>generate optimized bytecode (resulting in .pyo files)</td></tr>
+<tr><td>-S</td><td>do not run import site to look for Python paths on startup</td></tr>
+<tr><td>-v</td><td>verbose output (detailed trace on import statements)</td></tr>
+<tr><td>-X</td><td>disable class-based built-in exceptions (just use strings); obsolete starting with version 1.6</td></tr>
+<tr><td>-c cmd</td><td>run Python script sent in as cmd string</td></tr>
+<tr><td>file</td><td>run Python script from given file</td></tr>
+</table>
+<h2>(2) Script from the Command-line:</h2>
+<p>A Python script can be executed at command line by invoking the interpreter on your application, as in the following:</p>
+<pre class="prettyprint notranslate">
+$python  script.py          # Unix/Linux
+
+or 
+
+python% script.py           # Unix/Linux
+
+or 
+
+C:&gt;python script.py         # Windows/DOS
+</pre>
+<p><b>Note:</b> Be sure the file permission mode allows execution.</p>
+<h2>(3) Integrated Development Environment</h2>
+<p>You can run Python from a Graphical User Interface (GUI) environment as well, if you have a GUI application on your system that supports Python.</p>
+<ion-list>
+<li><p><b>Unix:</b> IDLE is the very first Unix IDE for Python.</p></li>
+<li><p><b>Windows:</b> PythonWin is the first Windows interface for Python and is an IDE with a GUI.</p></li>
+<li><p><b>Macintosh:</b> The Macintosh version of Python  along with the IDLE IDE is available from the main website, downloadable as either MacBinary or BinHex&apos;d files.</p></li>
+</ion-list>
+<p>If you are not able to set up the environment properly, then you can take help from your system admin. Make sure the Python environment is properly set up and working perfectly fine.</p>
+<p><b>Note:</b> All the examples given in subsequent chapters are executed with Python 3.4.1 version available on Windows 7 and Ubuntu Linux</p>
+<p>We already have set up Python Programming environment online, so that you can execute all the available examples online at the same time when you are learning theory. Feel free to modify any example and execute it online.</p>
+</div>
+
+</ion-content>
+</ion-view>

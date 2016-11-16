@@ -1,0 +1,145 @@
+<ion-view view-title="11 - Tuples">
+<ion-content style="margin:0 12px">
+
+<div class="col-md-7 middle-col">
+<h1>Python Tuples</h1>
+
+<hr>
+
+<p>A tuple is a sequence of immutable Python objects. Tuples are sequences, just like lists. The differences between tuples and lists are, the tuples cannot be changed unlike lists and tuples use parentheses, whereas lists use square brackets.</p>
+<p>Creating a tuple is as simple as putting different comma-separated values. Optionally you can put these comma-separated values between parentheses also. For example &#x2212;</p>
+<pre class="prettyprint notranslate">
+tup1 = (&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000);
+tup2 = (1, 2, 3, 4, 5 );
+tup3 = &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;;
+</pre>
+<p>The empty tuple is written as two parentheses containing nothing &#x2212;</p>
+<pre class="prettyprint notranslate">
+tup1 = ();
+</pre>
+<p>To write a tuple containing a single value you have to include a comma, even though there is only one value &#x2212;</p>
+<pre class="prettyprint notranslate">
+tup1 = (50,);
+</pre>
+<p>Like string indices, tuple indices start at 0, and they can be sliced, concatenated, and so on.</p>
+<h2>Accessing Values in Tuples:</h2>
+<p>To access values in tuple, use the square brackets for slicing along with the index or indices to obtain value available at that index. For example &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+tup1 = (&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000);
+tup2 = (1, 2, 3, 4, 5, 6, 7 );
+
+print &quot;tup1[0]: &quot;, tup1[0]
+print &quot;tup2[1:5]: &quot;, tup2[1:5]
+</pre>
+<p>When the above code is  executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+tup1[0]:  physics
+tup2[1:5]:  [2, 3, 4, 5]
+</pre>
+<h2>Updating Tuples</h2>
+<p>Tuples are immutable which means you cannot update or change the values of tuple elements. You are able to take portions of existing tuples to create new tuples as the following example demonstrates &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+tup1 = (12, 34.56);
+tup2 = (&apos;abc&apos;, &apos;xyz&apos;);
+
+# Following action is not valid for tuples
+# tup1[0] = 100;
+
+# So let&apos;s create a new tuple as follows
+tup3 = tup1 + tup2;
+print tup3
+</pre>
+<p>When the above code is executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+(12, 34.56, &apos;abc&apos;, &apos;xyz&apos;)
+</pre>
+<h2>Delete Tuple Elements</h2>
+<p>Removing individual tuple elements is not possible. There is, of course, nothing wrong with putting together another tuple with the undesired elements discarded.</p>
+<p>To explicitly remove an entire tuple, just use the <b>del</b> statement. For example:</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+tup = (&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000);
+
+print tup
+del tup;
+print &quot;After deleting tup : &quot;
+print tup
+</pre>
+<p>This produces the following result. Note an exception raised, this is because after <b>del tup</b> tuple does not exist any more &#x2212;</p>
+<pre class="result notranslate">
+(&apos;physics&apos;, &apos;chemistry&apos;, 1997, 2000)
+After deleting tup :
+Traceback (most recent call last):
+  File &quot;test.py&quot;, line 9, in &lt;module&gt;
+    print tup;
+NameError: name &apos;tup&apos; is not defined
+</pre>
+<h2>Basic Tuples Operations</h2>
+<p>Tuples respond to the + and * operators much like strings; they mean concatenation and repetition here too, except that the result is a new tuple, not a string.</p>
+<p>In fact, tuples respond to all of the general sequence operations we used on strings in the prior chapter &#x2212;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:33%">Python Expression</th><th style="width:33%">Results </th><th style="width:33%"> Description</th></tr>
+<tr><td>len((1, 2, 3))</td><td>3</td><td>Length</td></tr>
+<tr><td>(1, 2, 3) + (4, 5, 6)</td><td>(1, 2, 3, 4, 5, 6)</td><td>Concatenation</td></tr>
+<tr><td>(&apos;Hi!&apos;,) * 4</td><td>(&apos;Hi!&apos;, &apos;Hi!&apos;, &apos;Hi!&apos;, &apos;Hi!&apos;)</td><td>Repetition</td></tr>
+<tr><td>3 in (1, 2, 3)</td><td>True</td><td>Membership</td></tr>
+<tr><td>for x in (1, 2, 3): print x,</td><td>1 2 3</td><td>Iteration</td></tr>
+</table>
+<h2>Indexing, Slicing, and Matrixes</h2>
+<p>Because tuples are sequences, indexing and slicing work the same way for tuples as they do for strings. Assuming following input &#x2212;</p>
+<pre class="prettyprint notranslate">
+L = (&apos;spam&apos;, &apos;Spam&apos;, &apos;SPAM!&apos;)
+</pre>
+<p>&#xA0;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:33%">Python Expression</th><th style="width:33%">Results </th><th style="width:33%"> Description</th></tr>
+<tr><td>L[2]</td><td>&apos;SPAM!&apos;</td><td>Offsets start at zero</td></tr>
+<tr><td>L[-2]</td><td>&apos;Spam&apos;</td><td>Negative: count from the right</td></tr>
+<tr><td>L[1:]</td><td>[&apos;Spam&apos;, &apos;SPAM!&apos;]</td><td>Slicing fetches sections</td></tr>
+</table>
+<h2>No Enclosing Delimiters</h2>
+<p>Any set of multiple objects, comma-separated, written without identifying symbols, i.e., brackets for lists, parentheses for tuples, etc., default to tuples, as indicated in these short examples &#x2212;</p>
+<pre class="prettyprint notranslate tryit">
+#!/usr/bin/python
+
+print &apos;abc&apos;, -4.24e93, 18+6.6j, &apos;xyz&apos;
+x, y = 1, 2;
+print &quot;Value of x , y : &quot;, x,y
+</pre>
+<p>When the above code is executed, it produces the following result &#x2212;</p>
+<pre class="result notranslate">
+abc -4.24e+93 (18+6.6j) xyz
+Value of x , y : 1 2
+</pre>
+<h2>Built-in Tuple Functions</h2>
+<p>Python includes the following tuple functions &#x2212;</p>
+<table class="table table-bordered">
+<tr>
+<th style="width:5%">SN</th><th style="width:95%">Function with Description</th></tr>
+<tr><td>1</td><td><p>
+<!-- <a href="/python/tuple_cmp.htm">cmp(tuple1, tuple2)</a> --> cmp(tuple1, tuple2)
+</p>Compares elements of both tuples.</td></tr>
+<tr><td>2</td><td><p>
+<!-- <a href="/python/tuple_len.htm">len(tuple)</a> --> len(tuple)
+</p>Gives the total length of the tuple.</td></tr>
+<tr><td>3</td><td><p>
+<!-- <a href="/python/tuple_max.htm">max(tuple)</a> --> max(tuple)
+</p>Returns item from the tuple with max value.</td></tr>
+<tr><td>4</td><td><p>
+<!-- <a href="/python/tuple_min.htm">min(tuple)</a> --> min(tuple)
+</p>Returns item from the tuple with min value.</td></tr>
+<tr><td>5</td><td><p>
+<!-- <a href="/python/tuple_tuple.htm">tuple(seq)</a> --> tuple(seq)
+</p>Converts a list into tuple.</td></tr>
+</table>
+
+</div>
+</ion-content>
+</ion-view>
